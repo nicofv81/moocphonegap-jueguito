@@ -15,6 +15,10 @@ var app = {
 		alto  = document.documentElement.clientHeight;
 	    ancho = document.documentElement.clientWidth;
 
+	    //sonidos
+	    flag_choque = false;
+	    flag_comer = true;
+
 		app.vigilaSensores();
 
  	},
@@ -23,7 +27,12 @@ var app = {
 
  		function preload() {
 	  		game.physics.startSystem(Phaser.Physics.ARCADE);
- 			
+
+	  		game.load.audio("music","audio/a-team.mp3");
+	        game.load.audio("sonido_choque", "audio/block-crash.wav");
+            game.load.audio("ping", "audio/ping.mp3");
+
+
  			//game.stage.backgroundColor = '#82E0AA';
  			game.load.image("background", "assets/grass.png");
 	
@@ -52,6 +61,10 @@ var app = {
  			objetivoMalo=game.add.sprite(app.numeroAletarioHasta(ancho - DIAMETRO_OBJETIVO), 
  					app.numeroAletarioHasta(alto - DIAMETRO_OBJETIVO), 'objetivoMalo');
  			
+ 			music=game.add.audio("music");
+	        sonido_bloque=game.add.audio('sonido_choque');
+	        sonido_ping=game.add.audio('pong');
+
  			
  			game.physics.arcade.enable(bola);
  			game.physics.arcade.enable(objetivoBueno);
@@ -76,6 +89,8 @@ var app = {
  			objetivoMalo.body.onWorldBounds = new Phaser.Signal();
  			objetivoMalo.body.bounce.set(1);
   			
+  			music.loop=true;
+  			music.play();
  			
 		}
 
@@ -90,7 +105,15 @@ var app = {
 
       		game.physics.arcade.overlap(bola, objetivoBueno, app.capturaObjetivoBueno, null, this);
       		game.physics.arcade.overlap(bola, objetivoMalo, app.capturaObjetivoMalo, null, this);
-      					
+
+      		if (flag_choque){
+      			flag_choque=false;
+      			sonido_bloque.play(); 
+      		}
+          	if (flag_comer){
+            	flag_comer=false;
+            	sonido_ping.play();
+            }      					
  		}
 
  		var estados = {preload: preload, create: create, update: update};
@@ -101,6 +124,7 @@ var app = {
 	//Cambia la puntuación segun el parametro dado
 	decrementarPuntuacion: function() {
 		app.cambiarPuntuacion(-1);
+		flag_choque=true;
  	},
 
  	//Cambia la puntuación segun el parametro dado
@@ -125,6 +149,7 @@ var app = {
 
    		objetivoBueno.body.velocity.setTo(velocidadTargetX+(dificultad*10), velocidadTargetY+(dificultad*10));
 
+   		flag_comer=true;
 
  	},
 
@@ -136,6 +161,8 @@ var app = {
  		//Repintamos el objetivo bueno
 		objetivoMalo.body.x = app.numeroAletarioHasta(ancho - DIAMETRO_OBJETIVO);
  		objetivoMalo.body.y = app.numeroAletarioHasta(alto - DIAMETRO_OBJETIVO);
+
+ 		flag_comer = true;
 
  	},
 
