@@ -8,6 +8,7 @@ var app = {
 		puntuacion = 0;
 		velocidadX=0;
 		velocidadY=0; 
+
 		velocidadTargetX=200;
 		velocidadTargetY=200; 
 
@@ -16,8 +17,6 @@ var app = {
 
 		app.vigilaSensores();
 
-//		app.iniciaJuego();
-
  	},
 
  	iniciaJuego: function()  {
@@ -25,7 +24,9 @@ var app = {
  		function preload() {
 	  		game.physics.startSystem(Phaser.Physics.ARCADE);
  			
- 			game.stage.backgroundColor = '#82E0AA';
+ 			//game.stage.backgroundColor = '#82E0AA';
+ 			game.load.image("background", "assets/grass.png");
+	
 
  			//Cargamos las imagenes
  			game.load.image('bola','assets/bola.png');
@@ -36,6 +37,9 @@ var app = {
 
  		function create() {
  			
+ 			//Inicializamos el fondo
+ 			 game.add.tileSprite(0, 0, ancho, alto, 'background'); 
+
  			//Inicializamos el marcador
  			scoreText = game.add.text(16, 16, puntuacion, {fontSize: '100px', fill: '#757676'});
 
