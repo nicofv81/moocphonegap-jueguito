@@ -63,7 +63,7 @@ var app = {
  			
  			music=game.add.audio("music");
 	        sonido_bloque=game.add.audio('sonido_choque');
-	        sonido_ping=game.add.audio('pong');
+	        sonido_ping=game.add.audio('ping');
 
  			
  			game.physics.arcade.enable(bola);
